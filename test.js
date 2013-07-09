@@ -1,11 +1,9 @@
-
 var request = require('superagent');
-var proxy = require('./');
 
 // extend with Request#proxy()
-proxy(request);
+require('./')(request);
 
-// HTTP or HTTPS proxy to use
+// HTTP, HTTPS, or SOCKS proxy to use
 var proxy = process.env.http_proxy || 'http://168.63.43.102';
 
 request
@@ -14,5 +12,6 @@ request
   .end(onresponse);
 
 function onresponse (res) {
-  console.log(res);
+  console.log(res.status, res.headers);
+  console.log(res.body);
 }
