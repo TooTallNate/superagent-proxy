@@ -64,7 +64,6 @@ function proxy (uri) {
 
 function httpOrHttpsProxy (req, proxy) {
   var url = req.url;
-  console.log(url);
   if (0 == url.indexOf('https:')) {
     // HTTPS
     return new HttpsProxyAgent(proxy);
