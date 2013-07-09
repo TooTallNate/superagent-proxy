@@ -71,5 +71,4 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-[http-proxy-agent]: https://github.com/TooTallNate/node-http-proxy-agent
-[https-proxy-agent]: https://github.com/TooTallNate/node-https-proxy-agent
+[superagent]: https://github.com/visionmedia/superagent
