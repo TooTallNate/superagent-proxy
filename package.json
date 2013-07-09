@@ -1,0 +1,32 @@
+{
+  "name": "superagent-proxy",
+  "version": "0.0.0",
+  "description": "superagent extension that adds a Request#proxy(uri) function",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/TooTallNate/superagent-proxy.git"
+  },
+  "keywords": [
+    "superagent",
+    "http",
+    "https",
+    "proxy",
+    "socks"
+  ],
+  "author": "Nathan Rajlich <nathan@tootallnate.net> (http://n8.io/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TooTallNate/superagent-proxy/issues"
+  },
+  "dependencies": {
+    "http-proxy-agent": "0",
+    "https-proxy-agent": "0"
+  },
+  "peerDependencies": {
+    "superagent": "0"
+  }
+}
