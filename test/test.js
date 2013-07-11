@@ -87,9 +87,35 @@ describe('superagent-proxy', function () {
     });
   });
 
-  describe('socks: - HTTPS proxy', function () {
-    var proxy = process.env.SOCKS_PROXY || process.env.socks_proxy || 'https://10.1.10.200:9150';
-    // TODO...
+  describe('socks: - SOCKS proxy', function () {
+    var proxy = process.env.SOCKS_PROXY || process.env.socks_proxy || 'socks://127.0.0.1:9050';
+
+    it('should work against an HTTP endpoint', function (done) {
+      request
+      .get(httpLink)
+      .proxy(proxy)
+      .end(function (res) {
+        var data = res.body;
+        assert('ip' in data);
+        var ips = data.ip.split(/\,\s*/g);
+        assert(ips.length >= 1);
+        ips.forEach(function (ip) {
+          assert(net.isIP(ip));
+        });
+        done();
+      });
+    });
+
+    it('should work against an HTTPS endpoint', function (done) {
+      request
+      .get(httpsLink)
+      .proxy(proxy)
+      .end(function (res) {
+        var data = JSON.parse(res.text);
+        assert.equal('tootallnate', data.username);
+        done();
+      });
+    });
   });
 
 });
