@@ -6,6 +6,7 @@
 var url = require('url');
 var HttpProxyAgent = require('http-proxy-agent');
 var HttpsProxyAgent = require('https-proxy-agent');
+var SocksProxyAgent = require('socks-proxy-agent');
 
 /**
  * Module exports.
@@ -26,8 +27,8 @@ function setup (superagent) {
   var Request = superagent.Request;
   superagent.proxies = Request._proxies = {
     'http:': httpOrHttpsProxy,
-    'https:': httpOrHttpsProxy
-    //TODO: 'socks:': socks...
+    'https:': httpOrHttpsProxy,
+    'socks:': socksProxy
   };
   Request.prototype.proxy = proxy;
 }
@@ -71,4 +72,16 @@ function httpOrHttpsProxy (req, proxy) {
     // HTTP
     return new HttpProxyAgent(proxy);
   }
+}
+
+/**
+ * Default "socks:" proxy uri handler.
+ *
+ * @api protected
+ */
+
+function socksProxy (req, proxy) {
+  var url = req.url;
+  var secure = 0 == url.indexOf('https:');
+  return new SocksProxyAgent(proxy, secure);
 }
