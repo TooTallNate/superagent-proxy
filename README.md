@@ -6,9 +6,9 @@ This module extends [`visionmedia/superagent`][superagent]'s `Request` class wit
 a `.proxy(uri)` function. This allows you to proxy the HTTP request through a
 proxy of some kind.
 
-Built in are `http:` and `https:` proxy agents. A `socks:` agent is also planned.
-You can also define arbitrary proxy URI protocol handlers by adding a function
-that returns an `http.Agent` subclass for the desired "protocol".
+Built in are `http:`, `https:` and `socks:` proxy agents. You can also define
+arbitrary proxy URI protocol handlers by adding a function that returns an
+`http.Agent` subclass for the desired "protocol".
 
 
 Installation
