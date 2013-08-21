@@ -42,7 +42,10 @@ function setup (superagent) {
 
 function proxy (uri) {
   var proxies = this.constructor._proxies;
-  var proxyParsed = url.parse(uri);
+  var proxyParsed = uri;
+  if ('string' == typeof uri) {
+    proxyParsed = url.parse(uri);
+  }
   var proxyFn = proxies[proxyParsed.protocol];
   if (!proxyFn) throw new Error('unsupported proxy protocol: "' + proxyParsed.protocol + '"');
 
