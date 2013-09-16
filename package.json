@@ -23,14 +23,15 @@
     "url": "https://github.com/TooTallNate/superagent-proxy/issues"
   },
   "dependencies": {
-    "http-proxy-agent": "0",
-    "https-proxy-agent": "0",
-    "socks-proxy-agent": "0"
+    "http-proxy-agent": "*",
+    "https-proxy-agent": "*",
+    "socks-proxy-agent": "*"
   },
   "peerDependencies": {
-    "superagent": "0"
+    "superagent": ">=0.15.4"
   },
   "devDependencies": {
-    "mocha": "~1.12.0"
+    "mocha": "~1.12.0",
+    "superagent": ">=0.15.4"
   }
 }
