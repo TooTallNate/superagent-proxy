@@ -104,7 +104,7 @@ function proxy (uri) {
   // could have been passed in originally. This generated URI will
   // be used for caching soon
   var proxyUri = url.format({
-    protocol: protocol,
+    protocol: protocol + ':',
     slashes: true,
     hostname: proxyParsed.hostname || proxyParsed.host,
     port: proxyParsed.port
