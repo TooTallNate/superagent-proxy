@@ -19,6 +19,33 @@ describe('superagent-proxy', function () {
   var httpLink = 'http://jsonip.com/';
   var httpsLink = 'https://graph.facebook.com/tootallnate';
 
+  describe('superagent.Request#proxy()', function () {
+    it('should be a function', function () {
+      assert.equal('function', typeof request.Request.prototype.proxy);
+    });
+    it('should accept a "string" proxy URI', function () {
+      var req = request.get('http://foo.com');
+      req.proxy('http://example.com');
+    });
+    it('should accept an options "object" with proxy info', function () {
+      var req = request.get('http://foo.com');
+      req.proxy({
+        protocol: 'https',
+        host: 'proxy.org',
+        port: 8080
+      });
+    });
+    it('should throw on an options "object" without "protocol"', function () {
+      var req = request.get('http://foo.com');
+      assert.throws(function () {
+        req.proxy({
+          host: 'proxy.org',
+          port: 8080
+        });
+      });
+    }, /proxy type/);
+  });
+
   describe('http: - HTTP proxy', function () {
     var proxy = process.env.HTTP_PROXY || process.env.http_proxy || 'http://10.1.10.200:3128';
 
