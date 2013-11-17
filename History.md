@@ -1,4 +1,13 @@
 
+0.1.0 / 2013-11-16
+==================
+
+  * index: implement an LRU cache to lower the creation of `http.Agent` instances
+  * index: include the ":" when generating the cache URI
+  * index: add support for calling the proxy function directly
+  * index: cleanup and refactor to allow for an opts object to be used
+  * test: add some basic tests for the .proxy() function
+
 0.0.2 / 2013-11-15
 ==================
 
