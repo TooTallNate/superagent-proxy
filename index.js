@@ -4,6 +4,7 @@
  */
 
 var url = require('url');
+var LRU = require('lru-cache');
 var HttpProxyAgent = require('http-proxy-agent');
 var HttpsProxyAgent = require('https-proxy-agent');
 var SocksProxyAgent = require('socks-proxy-agent');
@@ -15,13 +16,27 @@ var SocksProxyAgent = require('socks-proxy-agent');
 module.exports = setup;
 
 /**
+ * Number of `http.Agent` instances to cache.
+ * This value was arbitrarily chosen... a better value could
+ * be conceived with some benchmarks.
+ */
+
+var cacheSize = 50;
+
+/**
+ * Cache for `http.Agent` instances.
+ */
+
+var defaultCache = new LRU(cacheSize);
+
+/**
  * The built-in proxy types.
  */
 
 var defaultProxies = {
-  'http': httpOrHttpsProxy,
-  'https': httpOrHttpsProxy,
-  'socks': socksProxy
+  http: httpOrHttpsProxy,
+  https: httpOrHttpsProxy,
+  socks: socksProxy
 };
 
 /**
@@ -58,6 +73,7 @@ function setup (superagent, uri) {
   if (Request) {
     // the superagent exports object - extent Request with "proxy"
     superagent.proxies = Request._proxies = Object.create(defaultProxies);
+    Request._proxiesCache = LRU(cacheSize);
     Request.prototype.proxy = proxy;
     return superagent;
   } else {
@@ -74,7 +90,11 @@ function setup (superagent, uri) {
  */
 
 function proxy (uri) {
-  var proxies = this.constructor._proxies || defaultProxies;
+  var proxies = defaultProxies;
+  var cache = defaultCache;
+  var Request = this.constructor;
+  if (Request && Request._proxies) proxies = Request._proxies;
+  if (Request && Request._proxiesCache) cache = Request._proxiesCache;
 
   // parse the URI into an opts object if it's a String
   var proxyParsed = uri;
@@ -101,8 +121,8 @@ function proxy (uri) {
   }
 
   // format the proxy info back into a URI, since an opts object
-  // could have been passed in originally. This generated URI will
-  // be used for caching soon
+  // could have been passed in originally. This generated URI is used
+  // as part of the "key" for the LRU cache
   var proxyUri = url.format({
     protocol: protocol + ':',
     slashes: true,
@@ -110,9 +130,26 @@ function proxy (uri) {
     port: proxyParsed.port
   });
 
-  // get an `http.Agent` instance from protocol-specific agent function
-  // TODO: implement caching based on the proxyUri
-  var agent = proxyFn(this, proxyParsed, proxyUri);
+  // determine if the `http` or `https` node-core module are going to be used.
+  // This information is useful to the proxy agents being created
+  var secure = 0 == this.url.indexOf('https:');
+
+  // create the "key" for the LRU cache
+  var key = proxyUri;
+  if (secure) key += ' secure';
+
+  // attempt to get a cached `http.Agent` instance first
+  var agent = cache.get(key);
+  if (!agent) {
+    // get an `http.Agent` instance from protocol-specific agent function
+    agent = proxyFn(this, proxyParsed, secure);
+    if (agent) cache.set(key, agent);
+  } else {
+    //console.error('cache hit! %j', key);
+  }
+
+  // if we have an `http.Agent` instance, either from the LRU cache or directly
+  // from the proxy agent creation function, then call the .agent() function
   if (agent) {
     this._proxy = proxyParsed;
     this._proxyUri = proxyUri;
@@ -129,9 +166,8 @@ function proxy (uri) {
  * @api protected
  */
 
-function httpOrHttpsProxy (req, proxy) {
-  var url = req.url;
-  if (0 == url.indexOf('https:')) {
+function httpOrHttpsProxy (req, proxy, secure) {
+  if (secure) {
     // HTTPS
     return new HttpsProxyAgent(proxy);
   } else {
@@ -146,8 +182,6 @@ function httpOrHttpsProxy (req, proxy) {
  * @api protected
  */
 
-function socksProxy (req, proxy) {
-  var url = req.url;
-  var secure = 0 == url.indexOf('https:');
+function socksProxy (req, proxy, secure) {
   return new SocksProxyAgent(proxy, secure);
 }
