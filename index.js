@@ -96,6 +96,10 @@ function proxy (uri) {
   if (Request && Request._proxies) proxies = Request._proxies;
   if (Request && Request._proxiesCache) cache = Request._proxiesCache;
 
+  if (!uri) {
+    return this;
+  }
+
   // parse the URI into an opts object if it's a String
   var proxyParsed = uri;
   if ('string' == typeof uri) {
