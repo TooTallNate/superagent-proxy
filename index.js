@@ -105,7 +105,8 @@ function proxy (uri) {
   // get the requested "protocol"
   var protocol = proxyParsed.protocol;
   if (!protocol) {
-    var types = Object.keys(proxies);
+    var types = [];
+    for (var type in proxies) types.push(type);
     throw new TypeError('you must specify a string "protocol" for the proxy type (' + types.join(', ') + ')');
   }
 

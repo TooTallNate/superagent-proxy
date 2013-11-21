@@ -37,13 +37,19 @@ describe('superagent-proxy', function () {
     });
     it('should throw on an options "object" without "protocol"', function () {
       var req = request.get('http://foo.com');
-      assert.throws(function () {
+      try {
         req.proxy({
           host: 'proxy.org',
           port: 8080
         });
-      });
-    }, /proxy type/);
+        assert(false, 'should be unreachable');
+      } catch (e) {
+        assert.equal('TypeError', e.name);
+        assert(/\bhttp\b/.test(e.message));
+        assert(/\bhttps\b/.test(e.message));
+        assert(/\bsocks\b/.test(e.message));
+      }
+    });
   });
 
   describe('http: - HTTP proxy', function () {
