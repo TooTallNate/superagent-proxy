@@ -6,12 +6,8 @@ This module extends [`visionmedia/superagent`][superagent]'s `Request` class wit
 a `.proxy(uri)` function. This allows you to proxy the HTTP request through a
 proxy of some kind.
 
-Built in are `http`, `https` and `socks` proxy agents. You can also define
-arbitrary proxy URI protocol handlers by adding a function that returns an
-`http.Agent` subclass for the desired "protocol".
-
-An LRU cache is used so that `http.Agent` instances are transparently re-used for
-subsequent HTTP requests to the same proxy server.
+It is backed by the [`proxy-agent`][proxy-agent] module, so see
+[its README for more details][proxy-agent-readme].
 
 
 Installation
@@ -34,7 +30,7 @@ var request = require('superagent');
 require('superagent-proxy')(request);
 
 // HTTP, HTTPS, or SOCKS proxy to use
-var proxy = process.env.http_proxy || 'http://168.63.43.102';
+var proxy = process.env.http_proxy || 'http://168.63.43.102:3128';
 
 request
   .get(process.argv[2] || 'https://encrypted.google.com/')
@@ -75,3 +71,5 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 [superagent]: https://github.com/visionmedia/superagent
+[proxy-agent]: https://github.com/TooTallNate/node-proxy-agent
+[proxy-agent-readme]: https://github.com/TooTallNate/node-proxy-agent/blob/master/README.md
