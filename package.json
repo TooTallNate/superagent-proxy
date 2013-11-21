@@ -1,6 +1,6 @@
 {
   "name": "superagent-proxy",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "`Request#proxy(uri)` superagent extension",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "url": "https://github.com/TooTallNate/superagent-proxy/issues"
   },
   "dependencies": {
-    "proxy-agent": "~0.0.1"
+    "proxy-agent": "~0.0.2"
   },
   "peerDependencies": {
     "superagent": "~0.15.4"
