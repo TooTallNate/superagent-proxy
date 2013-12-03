@@ -13,8 +13,6 @@ module.exports = setup;
 
 /**
  * Adds a `.proxy(uri)` function to the "superagent" module's Request class.
- * No `proxyAgents` are added by default. You must add an `http.Agent` subclass
- * (like HTTP proxy, HTTPS proxy, and SOCKS) to handle the connection internally.
  *
  * ``` js
  * var request = require('superagent');
@@ -27,7 +25,7 @@ module.exports = setup;
  * ```
  *
  * Or, you can pass in a `superagent.Request` instance, and it's like calling the
- * proxy function on it without extending the prototype:
+ * `.proxy(uri)` function on it, but without extending the prototype:
  *
  * ``` js
  * var request = require('superagent');
