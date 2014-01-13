@@ -127,5 +127,5 @@ function getUrl () {
 function setUrl (v) {
   debug('set `.url`: %s', v);
   this._url = v;
-  this.proxy(this._proxyUri);
+  proxy.call(this, this._proxyUri);
 }
