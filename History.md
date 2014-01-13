@@ -1,4 +1,11 @@
 
+0.3.0 / 2014-01-13
+==================
+
+  * index: fix the redirect http -> https scenario
+  * index: use `debug` component
+  * package: update "proxy-agent" to v1
+
 0.2.0 / 2013-11-20
 ==================
 
