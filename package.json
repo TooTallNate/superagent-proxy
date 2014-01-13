@@ -23,7 +23,7 @@
     "url": "https://github.com/TooTallNate/superagent-proxy/issues"
   },
   "dependencies": {
-    "proxy-agent": "~0.0.2"
+    "proxy-agent": "1"
   },
   "peerDependencies": {
     "superagent": "~0.15.4"
