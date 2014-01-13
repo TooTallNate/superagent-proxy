@@ -61,6 +61,12 @@ function setup (superagent, uri) {
 function proxy (uri) {
   debug('Request#proxy(%j)', uri);
 
+  // we need to observe the `url` field from now on... Superagent sometimes
+  // re-uses the `req` instance but changes its `url` field (i.e. in the case of
+  // a redirect), so when that happens we need to potentially re-set the proxy
+  // agent
+  setupUrl(this);
+
   // determine if the `http` or `https` node-core module are going to be used.
   // This information is useful to the proxy agents being created
   var secure = 0 == this.url.indexOf('https:');
@@ -72,5 +78,54 @@ function proxy (uri) {
   // if we have an `http.Agent` instance then call the .agent() function
   if (agent) this.agent(agent);
 
+  // store the proxy URI in case of changes to the `url` prop in the future
+  this._proxyUri = uri;
+
   return this;
+}
+
+/**
+ * Sets up a get/set descriptor for the `url` property of the provided `req`
+ * Request instance. This is so that we can re-run the "proxy agent" logic when
+ * the `url` field is changed, i.e. during a 302 Redirect scenario.
+ *
+ * @api private
+ */
+
+function setupUrl (req) {
+  var desc = Object.getOwnPropertyDescriptor(req, 'url');
+  if (desc.get == getUrl && desc.set == setUrl) return; // already patched
+
+  // save current value
+  req._url = req.url;
+
+  desc.get = getUrl;
+  desc.set = setUrl;
+  delete desc.value;
+  delete desc.writable;
+
+  Object.defineProperty(req, 'url', desc);
+  debug('patched superagent Request "url" property for changes');
+}
+
+/**
+ * `url` property getter.
+ *
+ * @api protected
+ */
+
+function getUrl () {
+  return this._url;
+}
+
+/**
+ * `url` property setter.
+ *
+ * @api protected
+ */
+
+function setUrl (v) {
+  debug('set `.url`: %s', v);
+  this._url = v;
+  this.proxy(this._proxyUri);
 }
