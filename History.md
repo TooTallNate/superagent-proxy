@@ -1,4 +1,11 @@
 
+0.3.2 / 2015-05-18
+==================
+
+  * package: update "debug" to v2.2.0
+  * package: still limit "superagent" to < v2
+  * package: support superagent >= 1.0 (#14, @Jxck)
+
 0.3.1 / 2014-08-21
 ==================
 
