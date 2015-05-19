@@ -27,10 +27,10 @@
     "debug": "~0.7.4"
   },
   "peerDependencies": {
-    "superagent": ">= 0.15.4"
+    "superagent": ">= 0.15.4 && < 2"
   },
   "devDependencies": {
     "mocha": "~1.12.0",
-    "superagent": ">= 0.15.4"
+    "superagent": ">= 0.15.4 && < 2"
   }
 }
