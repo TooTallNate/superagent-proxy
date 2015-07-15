@@ -59,7 +59,7 @@ function setup (superagent, uri) {
  */
 
 function proxy (uri) {
-  debug('Request#proxy(%j)', uri);
+  debug('Request#proxy(%o)', uri);
 
   // we need to observe the `url` field from now on... Superagent sometimes
   // re-uses the `req` instance but changes its `url` field (i.e. in the case of
@@ -125,7 +125,7 @@ function getUrl () {
  */
 
 function setUrl (v) {
-  debug('set `.url`: %s', v);
+  debug('set `.url`: %o', v);
   this._url = v;
   proxy.call(this, this._proxyUri);
 }
