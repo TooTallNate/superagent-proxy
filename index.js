@@ -67,13 +67,8 @@ function proxy (uri) {
   // agent
   setupUrl(this);
 
-  // determine if the `http` or `https` node-core module are going to be used.
-  // This information is useful to the proxy agents being created
-  var secure = 0 == this.url.indexOf('https:');
-  debug('url is secure? %s', secure);
-
   // attempt to get a proxying `http.Agent` instance
-  var agent = proxyAgent(uri, secure);
+  var agent = proxyAgent(uri);
 
   // if we have an `http.Agent` instance then call the .agent() function
   if (agent) this.agent(agent);
