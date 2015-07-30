@@ -37,9 +37,13 @@ request
   .proxy(proxy)
   .end(onresponse);
 
-function onresponse (res) {
-  console.log(res.status, res.headers);
-  console.log(res.body);
+function onresponse (err, res) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log(res.status, res.headers);
+    console.log(res.body);
+  }
 }
 ```
 
