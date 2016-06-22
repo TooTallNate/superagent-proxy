@@ -1,6 +1,6 @@
 {
   "name": "superagent-proxy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "`Request#proxy(uri)` superagent extension",
   "main": "index.js",
   "scripts": {

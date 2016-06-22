@@ -1,4 +1,10 @@
 
+1.0.1 / 2016-06-22
+==================
+
+  * package: allow "superagent" v2
+  * fixed example (#15, @reedrosenbluth)
+
 1.0.0 / 2015-07-15
 ==================
 
