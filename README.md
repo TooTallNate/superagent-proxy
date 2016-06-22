@@ -2,7 +2,7 @@ superagent-proxy
 ================
 ### `Request#proxy(uri)` superagent extension
 
-This module extends [`visionmedia/superagent`][superagent]'s `Request` class with
+This module extends [`superagent`][superagent]'s `Request` class with
 a `.proxy(uri)` function. This allows you to proxy the HTTP request through a
 proxy of some kind.
 
