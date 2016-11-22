@@ -1,5 +1,4 @@
-
-1.0.2 / 2016-06-22
+1.0.2 / 2016-11-21
 ==================
 
 * [[`915a4b0ee9`](https://github.com/TooTallNate/superagent-proxy/commit/915a4b0ee9)] - Update to use superagent 3 (#23, Matt Blair)
