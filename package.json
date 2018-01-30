@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "proxy-agent": "2",
-    "debug": "2"
+    "debug": "^3.1.0"
   },
   "peerDependencies": {
     "superagent": ">= 0.15.4 || 1 || 2 || 3"
