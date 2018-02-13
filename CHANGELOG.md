@@ -1,3 +1,10 @@
+1.0.3 / 2018-02-12
+==================
+
+* [[`757b09f485`](https://github.com/TooTallNate/superagent-proxy/commit/757b09f485)] - Upgrading debug dependency to avoid ReDoS (#26) (Adrián Estrada)
+* [[`17fd826650`](https://github.com/TooTallNate/superagent-proxy/commit/17fd826650)] - rename History.md to CHANGELOG.md (Nathan Rajlich)
+* [[`050b80b237`](https://github.com/TooTallNate/superagent-proxy/commit/050b80b237)] - fix date (Nathan Rajlich)
+
 1.0.2 / 2016-11-21
 ==================
 
