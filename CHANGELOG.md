@@ -1,3 +1,8 @@
+2.0.0 / 2018-07-11
+==================
+  * Upgrade "proxy-agent" to remove deprecation warning and enable socks v2
+  * drop support for Node < 6
+
 1.0.3 / 2018-02-12
 ==================
 
