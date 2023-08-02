@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  test:
+    image: node:${NODE_VERSION:-16}-slim # Node 16 by default; "NODE_VERSION=<ver> docker-compose up" to run something different
+    user: node
+    working_dir: /home/node/app
+    environment:
+      http_proxy: http://squid:3128
+      https_proxy: http://squid:3128
+      socks_proxy: socks://socks:1080
+    volumes:
+      - ./:/home/node/app
+    command: "sleep infinity" # idle, use "docker-compose exec test npm <command>" after this is started
+
+  squid:
+    image: ubuntu/squid
+    environment:
+      - TZ=UTC
+    ports:
+      - 127.0.0.1:3128:3128
+
+  socks:
+    image: serjs/go-socks5-proxy
+    ports:
+      - 127.0.0.1:1080:1080
