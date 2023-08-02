@@ -1,0 +1,39 @@
+name: 'CI'
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      squid:
+        image: ubuntu/squid
+        env:
+          TZ: UTC
+        ports:
+          - '3128:3128'
+      socks:
+        image: serjs/go-socks5-proxy
+        ports:
+          - 1080:1080
+
+    strategy:
+      matrix:
+        node-version: [14, 16, 18, 20]
+
+    container: node:${{ matrix.node-version }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm install
+      - run: npm run build --if-present
+      - run: npm test
+        env:
+          http_proxy: http://squid:3128
+          https_proxy: http://squid:3128
+          socks_proxy: socks://socks:1080
