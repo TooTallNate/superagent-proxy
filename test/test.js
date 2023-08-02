@@ -16,8 +16,8 @@ describe('superagent-proxy', function () {
   this.slow(5000);
   this.timeout(10000);
 
-  var httpLink = 'http://jsonip.com/';
-  var httpsLink = 'https://graph.facebook.com/tootallnate';
+  var httpLink = 'http://neverssl.com/';
+  var httpsLink = 'https://google.com';
 
   describe('superagent.Request#proxy()', function () {
     it('should be a function', function () {
@@ -53,20 +53,23 @@ describe('superagent-proxy', function () {
   });
 
   describe('http: - HTTP proxy', function () {
-    var proxy = process.env.HTTP_PROXY || process.env.http_proxy || 'http://10.1.10.200:3128';
+    var proxy = process.env.HTTP_PROXY || process.env.http_proxy;
+
+    before(function () {
+      if (proxy == undefined) {
+        console.log('Skipped: http_proxy env var must be set to an operational proxy endpoint to enable these tests.')
+        this.skip();
+      }
+    });
 
     it('should work against an HTTP endpoint', function (done) {
       request
       .get(httpLink)
       .proxy(proxy)
-      .end(function (res) {
-        var data = res.body;
-        assert('ip' in data);
-        var ips = data.ip.split(/\,\s*/g);
-        assert(ips.length >= 1);
-        ips.forEach(function (ip) {
-          assert(net.isIP(ip));
-        });
+      .end(function (err, res) {
+        if (err) throw err;
+        assert.match(res.text, /NeverSSL/);
+        assert.match(res.headers['via'], /squid/, 'Squid sets a via header in the response returned for HTTP requests.');
         done();
       });
     });
@@ -75,16 +78,23 @@ describe('superagent-proxy', function () {
       request
       .get(httpsLink)
       .proxy(proxy)
-      .end(function (res) {
-        var data = JSON.parse(res.text);
-        assert.equal('tootallnate', data.username);
+      .end(function (err, res) {
+        if (err) throw err;
+        assert.match(res.text, /doctype/);
         done();
       });
     });
   });
 
   describe('https: - HTTPS proxy', function () {
-    var proxy = process.env.HTTPS_PROXY || process.env.https_proxy || 'https://10.1.10.200:3130';
+    var proxy = process.env.HTTPS_PROXY || process.env.https_proxy;
+
+    before(function () {
+      if (proxy == undefined) {
+        console.log('Skipped: https_proxy env var must be set to an operational proxy endpoint to enable these tests.')
+        this.skip();
+      }
+    });
 
     it('should work against an HTTP endpoint', function (done) {
       var p = url.parse(proxy);
@@ -92,15 +102,11 @@ describe('superagent-proxy', function () {
 
       request
       .get(httpLink)
-      .proxy(p)
-      .end(function (res) {
-        var data = res.body;
-        assert('ip' in data);
-        var ips = data.ip.split(/\,\s*/g);
-        assert(ips.length >= 1);
-        ips.forEach(function (ip) {
-          assert(net.isIP(ip));
-        });
+      .proxy(proxy)
+      .end(function (err, res) {
+        if (err) throw err;
+        assert.match(res.text, /NeverSSL/);
+        assert.match(res.headers['via'], /squid/, 'Squid sets a via header in the response returned for HTTP requests.');
         done();
       });
     });
@@ -111,30 +117,32 @@ describe('superagent-proxy', function () {
 
       request
       .get(httpsLink)
-      .proxy(p)
-      .end(function (res) {
-        var data = JSON.parse(res.text);
-        assert.equal('tootallnate', data.username);
+      .proxy(proxy)
+      .end(function (err, res) {
+        if (err) throw err;
+        assert.match(res.text, /doctype/);
         done();
       });
     });
   });
 
   describe('socks: - SOCKS proxy', function () {
-    var proxy = process.env.SOCKS_PROXY || process.env.socks_proxy || 'socks://127.0.0.1:9050';
+    var proxy = process.env.SOCKS_PROXY || process.env.socks_proxy;
+
+    before(function () {
+      if (proxy == undefined) {
+        console.log('Skipped. socks_proxy env var must be set to an operational proxy endpoint to enable these tests.')
+        this.skip();
+      }
+    });
 
     it('should work against an HTTP endpoint', function (done) {
       request
       .get(httpLink)
       .proxy(proxy)
-      .end(function (res) {
-        var data = res.body;
-        assert('ip' in data);
-        var ips = data.ip.split(/\,\s*/g);
-        assert(ips.length >= 1);
-        ips.forEach(function (ip) {
-          assert(net.isIP(ip));
-        });
+      .end(function (err, res) {
+        if (err) throw err;
+        assert.match(res.text, /NeverSSL/);
         done();
       });
     });
@@ -143,9 +151,9 @@ describe('superagent-proxy', function () {
       request
       .get(httpsLink)
       .proxy(proxy)
-      .end(function (res) {
-        var data = JSON.parse(res.text);
-        assert.equal('tootallnate', data.username);
+      .end(function (err, res) {
+        if (err) throw err;
+        assert.match(res.text, /doctype/);
         done();
       });
     });
